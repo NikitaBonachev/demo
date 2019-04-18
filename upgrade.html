@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css"/>
+</head>
+<body class="red lighten-5">
+    <div class="row">
+        <div class="col s12 m2">
+            <div class="card red lighten-2">    
+                    <div class="card-content white-text">
+                        <span class="card-title">Default Paystation</span>
+                    </div>    
+                    <div class="card-action">
+                        <input class="btn-default btn red" type="submit" name="submit" value="Get upgrades">    
+                    </div>   
+            </div>
+        </div>
+        <div class="col s12 m2">
+            <div class="card red lighten-2">   
+                <div class="card-content white-text">
+                    <span class="card-title">Dark Paystation</span>
+                </div> 
+                <div class="card-action">
+                    <input class="btn-dark btn red" type="submit" name="submit" value="Get upgrades">    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="success-message row" hidden="true">
+        <div class="col s12 m2">
+                <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header red lighten-2 white-text">Email was sended</div>
+                    </li>
+                </ul>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function hide() {
+        $(".success-message").hide(200);
+    }
+
+    function success() {
+        $(".success-message").show(200);
+        setTimeout(hide, 1500);
+    }
+
+    function getEmail(access_data) {
+        $.post(
+            'https://secure.xsolla.com/paystation2/api/pay2play/send_upgrade_list', 
+            {
+                "access_data": JSON.stringify(access_data),
+                "digital_content_sku": "soul_upgade_platinum"
+            }, 
+            success
+        );
+    }
+
+    function send_default() {
+        var access_data = {
+            "user":{
+                "id":{"value":"a.cherepanov"},
+                "name":{"value":"a.cherepanov"},
+                "email":{"value":"a.cherepanov@xsolla.com"},
+                "country":{"value":"US"}
+            },
+            "settings":{
+                "project_id":43222,
+                "currency":"USD",
+                "language":"en"
+            }
+        };
+
+        getEmail(access_data); 
+    }
+
+    function send_dark() {
+        var access_data = {
+            "user":{
+                "id":{"value":"a.cherepanov"},
+                "name":{"value":"a.cherepanov"},
+                "email":{"value":"a.cherepanov@xsolla.com"},
+                "country":{"value":"US"}
+            },
+            "settings":{
+                "project_id":43222,
+                "currency":"USD",
+                "language":"en",
+                "ui": {
+                    "theme": "dark"
+                }
+            }
+        };
+
+        getEmail(access_data); 
+    }
+
+    $(".btn-default").click(send_default);
+    $(".btn-dark").click(send_dark);
+</script>
